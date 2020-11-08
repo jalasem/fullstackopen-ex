@@ -1,1 +1,1 @@
-# fullstackopen-part0
+# fullstackopen course
