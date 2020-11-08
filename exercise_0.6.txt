@@ -1,0 +1,12 @@
+title User creates new note (SPA)
+
+note left of browser:
+    user types something
+    into the text field and clicks
+    the submit button in the browser
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note right of server: server saves the new note
+server-->browser: {"message":"note created"}
+note left of browser: SPA appends new note to note list
