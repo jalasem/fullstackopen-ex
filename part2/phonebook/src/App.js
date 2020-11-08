@@ -10,6 +10,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [filter, setFilter] = useState('')
 
+  const generateId = () => Math.max(...persons.map(person => person.id)) + 1
+
   const handleSubmit = e => {
     e.preventDefault()
 
@@ -20,7 +22,7 @@ const App = () => {
       return
     }
 
-    setPersons(persons => persons.concat({ name: newName, number: newNumber }))
+    setPersons(persons => persons.concat({ name: newName, number: newNumber, id: generateId() }))
     setNewName('')
     setNewNumber('')
   }
