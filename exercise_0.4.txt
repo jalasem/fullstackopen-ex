@@ -1,0 +1,15 @@
+title User creates new note
+
+note left of browser:
+    user types something
+    into the text field and clicks
+    the submit button in the browser
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note right of server: server saves the new note
+note over server: request is complete
+note over browser: once note is saved (request is complete)
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: sends back data.json (the entire list of notes)
+note left of browser: note gets rendered in the browser
