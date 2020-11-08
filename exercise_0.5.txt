@@ -1,15 +1,5 @@
-title User creates new note (SPA)
+title Notes (SPA version)
 
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
 server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
 note over browser: SPA renders note list in the browser
-note left of browser:
-    user types something
-    into the text field and clicks
-    the submit button in the browser
-end note
-
-browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
-note right of server: server saves the new note
-server-->browser: {"message":"note created"}
-note left of browser: SPA appends new note to note list
