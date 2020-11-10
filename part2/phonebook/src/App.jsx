@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+
+import { getPeople, createPerson, updatePerson } from './services/persons'
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
@@ -28,8 +29,7 @@ const App = () => {
       id: generateId()
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
+    createPerson(newPerson)
       .then(({data}) => {
         setPersons(persons => persons.concat(newPerson))
         setNewName('')
@@ -43,7 +43,7 @@ const App = () => {
   const handleNumberInput = (e) => setNewNumber(e.target.value)
 
   useEffect(() => {
-    axios('http://localhost:3001/persons')
+    getPeople()
       .then(({ data }) => setPersons(data))
       .catch((err) => console.error({ err }))
   }, [])
@@ -64,7 +64,7 @@ const App = () => {
         number={newNumber}
         nameInput={handleNameInput}
         numberInput={handleNumberInput}
-        submit={handleSubmit}
+        submit={addPerson}
       />
 
       <h2>Numbers</h2>
