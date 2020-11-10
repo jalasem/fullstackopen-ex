@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 import {
   getPeople,
@@ -15,6 +16,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notification, setNotification] = useState({
+    message: "",
+    messageType: "",
+  });
 
   const generateId = () => Math.max(...persons.map((person) => person.id)) + 1;
 
@@ -23,9 +28,14 @@ const App = () => {
 
     if (!newName || !newNumber) return;
 
-    const personExist = persons.find((person) => person.name === newName)
+    const personExist = persons.find((person) => person.name === newName);
     if (personExist) {
-      if (!window.confirm(`${personExist.name} is already added to phonebook, replace the old number with a new one?`)) return
+      if (
+        !window.confirm(
+          `${personExist.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      )
+        return;
 
       updatePerson(personExist.id, {
         number: newNumber,
@@ -37,6 +47,7 @@ const App = () => {
               return person;
             })
           );
+          notify(`updated ${newName}`)
           setNewName("");
           setNewNumber("");
         })
@@ -51,6 +62,7 @@ const App = () => {
       createPerson(newPerson)
         .then(({ data }) => {
           setPersons((persons) => persons.concat(data));
+          notify(`Added ${newName}`)
           setNewName("");
           setNewNumber("");
         })
@@ -60,11 +72,33 @@ const App = () => {
 
   const deletePerson = (id) => {
     removePerson(id)
-      .then(() =>
+      .then(() => {
+        const { name } = persons.find(person => person.id === id)
         setPersons((persons) => persons.filter((person) => person.id !== id))
-      )
-      .catch((err) => console.error({ err }));
+        notify(`${name} removed`)
+      })
+      .catch((err) => {
+        if (err.response && err.response.status && err.response.status === 404) {
+          notify(`${persons.find(person => person.id === id).name} has already been removed from server`, 'error')
+        } else {
+          console.error({ err })
+        }
+      });
   };
+
+  const notify = (message, type = 'success', timeout = 1000 * 15) => {
+    setNotification({
+      message,
+      messageType: type
+    })
+
+    setTimeout(() => {
+      setNotification({
+        message: '',
+        messageType: ''
+      })
+    }, timeout)
+  }
 
   const handleFilter = (e) => setFilter(e.target.value);
   const handleNameInput = (e) => setNewName(e.target.value);
@@ -84,6 +118,10 @@ const App = () => {
 
   return (
     <div>
+      <Notification
+        message={notification.message}
+        messageType={notification.messageType}
+      />
       <h1>Phonebook</h1>
       <Filter filter={filter} handleFilter={handleFilter} />
 

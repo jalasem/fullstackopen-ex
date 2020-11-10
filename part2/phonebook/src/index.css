@@ -1,0 +1,17 @@
+.error, .warning, .success {
+  padding: .5rem 1rem;
+  margin: 5px;
+  border-radius: 5px;
+}
+.error {
+  color: red;
+  background-color: rgba(255, 0, 0, 0.2);
+}
+.warning {
+  color: black;
+  background: yellow;
+}
+.success {
+  color: green;
+  background: yellowgreen;
+}
