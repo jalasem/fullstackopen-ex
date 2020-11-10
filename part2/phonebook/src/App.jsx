@@ -3,7 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
-import { getPeople, createPerson, updatePerson } from './services/persons'
+import { getPeople, createPerson, updatePerson, removePerson } from './services/persons'
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
@@ -38,6 +38,12 @@ const App = () => {
       .catch(err => console.error({ err }))
   }
 
+  const deletePerson = (id) => {
+    removePerson(id)
+      .then(() => setPersons(persons => persons.filter(person => person.id !== id)))
+      .catch(err => console.error({ err }))
+  }
+
   const handleFilter = e => setFilter(e.target.value)
   const handleNameInput = (e) => setNewName(e.target.value)
   const handleNumberInput = (e) => setNewNumber(e.target.value)
@@ -68,7 +74,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filtered} />
+      <Persons deletePerson={deletePerson} persons={filtered} />
     </div>
   )
 }
