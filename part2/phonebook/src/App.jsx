@@ -79,6 +79,7 @@ const App = () => {
       })
       .catch((err) => {
         if (err.response && err.response.status && err.response.status === 404) {
+          setPersons((persons) => persons.filter((person) => person.id !== id))
           notify(`${persons.find(person => person.id === id).name} has already been removed from server`, 'error')
         } else {
           console.error({ err })
