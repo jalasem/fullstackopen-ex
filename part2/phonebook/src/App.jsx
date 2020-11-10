@@ -12,8 +12,8 @@ const App = () => {
 
   const generateId = () => Math.max(...persons.map(person => person.id)) + 1
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const addPerson = event => {
+    event.preventDefault()
 
     if (!newName || !newNumber) return 
 
@@ -22,9 +22,20 @@ const App = () => {
       return
     }
 
-    setPersons(persons => persons.concat({ name: newName, number: newNumber, id: generateId() }))
-    setNewName('')
-    setNewNumber('')
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+      id: generateId()
+    }
+
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(({data}) => {
+        setPersons(persons => persons.concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(err => console.error({ err }))
   }
 
   const handleFilter = e => setFilter(e.target.value)
