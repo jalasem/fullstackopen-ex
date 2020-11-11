@@ -107,7 +107,11 @@ const App = () => {
 
   useEffect(() => {
     getPeople()
-      .then(({ data }) => setPersons(data))
+      .then(({ data }) => setPersons(data.map(person => {
+        person.id = person._id
+
+        return person
+      })))
       .catch((err) => console.error({ err }));
   }, []);
 
